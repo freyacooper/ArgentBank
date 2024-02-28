@@ -1,9 +1,11 @@
 import './index.scss';
 import Button from '../../Components/Button';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function SignIn() {
 
+    const navigate = useNavigate()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
@@ -15,6 +17,26 @@ function SignIn() {
         }
         const inputString = JSON.stringify(userInput)
         console.log(inputString)
+        fetch("http://localhost:3001/api/v1/user/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: inputString
+        })
+        .then(res => {
+            if(res.status === 200) {
+                return res.json()
+            }
+            else {
+                throw new Error("Erreur dans l'identifiant ou le mot de passe")
+            }
+        })
+        .then(data => {
+            console.log(data.body.token)
+            navigate('/user')
+        })
+        .catch(error => {
+            console.log(error.message)
+        })
     }
 
     return (
@@ -35,7 +57,6 @@ function SignIn() {
                         <input type="checkbox" id="remember-me" />
                         <label for="remember-me">Remember me</label>
                     </div>
-                    {/* <a href="./user.html" class="sign-in-button">Sign In</a> */}
                     <Button buttonText="Sign In" classProp="button"  />
                 </form>
             </section>
