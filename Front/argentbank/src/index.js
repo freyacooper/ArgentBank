@@ -8,19 +8,23 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './Pages/Home';
 import SignIn from './Pages/Sign-in';
 import User from './Pages/User';
+import { Provider } from 'react-redux';
+import { store } from './Redux/store';
  
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Router>
-      <Header />
-        <Routes>
-            <Route path='/' element={<Home />}/>
-            <Route path='/sign-in' element={<SignIn />}/>
-            <Route path='/user' element={<User />}/>
-        </Routes>
-      <Footer />
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <Header />
+          <Routes>
+              <Route path='/' element={<Home />}/>
+              <Route path='/sign-in' element={<SignIn />}/>
+              <Route path='/user' element={<User />}/>
+          </Routes>
+        <Footer />
+      </Router>
+    </Provider>
   </React.StrictMode>
 );
 

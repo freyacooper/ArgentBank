@@ -2,12 +2,15 @@ import './index.scss';
 import Button from '../../Components/Button';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 function SignIn() {
-
+    
+    const dispatch = useDispatch()
     const navigate = useNavigate()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [errorMessage, setErrorMessage] = useState('')
 
     function handleClick(event) {
         event.preventDefault();
@@ -16,7 +19,6 @@ function SignIn() {
             "password" : password
         }
         const inputString = JSON.stringify(userInput)
-        console.log(inputString)
         fetch("http://localhost:3001/api/v1/user/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -31,11 +33,14 @@ function SignIn() {
             }
         })
         .then(data => {
-            console.log(data.body.token)
+            dispatch({
+                type: "auth/setToken",
+                payload: data.body.token
+            })
             navigate('/user')
         })
         .catch(error => {
-            console.log(error.message)
+            setErrorMessage(error.message)
         })
     }
 
@@ -47,12 +52,18 @@ function SignIn() {
                 <form onSubmit={(event) => handleClick(event)}> 
                     <div className="input-wrapper">
                         <label for="username">Username</label>
-                        <input type="text" id="username" onChange={(event) => setEmail(event.target.value)}/>
+                        <input type="text" id="username" onChange={(event) => setEmail(event.target.value)} onClick={() => setErrorMessage('')}/>
                     </div>
                     <div className="input-wrapper">
                         <label for="password">Password</label>
-                        <input type="password" id="password" onChange={(event) => setPassword(event.target.value)}/>
+                        <input type="password" id="password" onChange={(event) => setPassword(event.target.value)} onClick={() => setErrorMessage('')}/>
                     </div>
+                    { errorMessage ? (
+                        <div>
+                        <p>{errorMessage}</p>
+                        </div>
+                    ) : (null)
+                    }
                     <div className="input-remember">
                         <input type="checkbox" id="remember-me" />
                         <label for="remember-me">Remember me</label>
