@@ -16,6 +16,7 @@ function User() {
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
     const [newUsername, setNewUsername] = useState("")
+    console.log(userNameValue)
 
     useEffect(() => {
         const lsToken = window.localStorage.getItem('token')
@@ -25,6 +26,7 @@ function User() {
                 payload: lsToken
                 })
             }
+        const lsUsername = window.localStorage.getItem('newUsername')
             
             if(!authToken && !lsToken) {
                 navigate('/')
@@ -51,12 +53,18 @@ function User() {
                         type: "userName/setUserName",
                         payload: data.body.userName,
                     })
+                    if(lsUsername) {
+                        dispatch({
+                        type: "userName/setUserName",
+                        payload: lsUsername
+                        })
+                    }
                 })
                 .catch(error => {
                     console.log(error.message)
                 })
             }
-        }, []
+        }
     ) 
     function saveUsername() {
         console.log(newUsername)
@@ -64,6 +72,7 @@ function User() {
             type: "userName/setUserName",
             payload: newUsername,
         })
+        window.localStorage.setItem('newUsername', newUsername)
         setEditUsername(false)
     }
 

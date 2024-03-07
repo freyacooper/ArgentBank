@@ -30,8 +30,8 @@ function Header() {
                             <i className="fa fa-user-circle"></i>
                             {userNameValue}
                         </Link>
-                        <Link class="main-nav-item" to="/" onClick={() => handleSignout()}>
-                            <i class="fa fa-sign-out"></i>
+                        <Link className="main-nav-item" to="/" onClick={() => handleSignout()}>
+                            <i className="fa fa-sign-out"></i>
                             Sign Out
                         </Link>
                     </div>
