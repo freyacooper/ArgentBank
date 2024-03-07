@@ -1,8 +1,8 @@
 import './index.scss'
 
-function Button({ buttonText, classProp, }) {
+function Button({ buttonText, classProp, onClick }) {
     return (
-        <button className={classProp}>{buttonText}</button>
+        <button className={classProp} onClick={onClick}>{buttonText}</button>
     )
 }
 

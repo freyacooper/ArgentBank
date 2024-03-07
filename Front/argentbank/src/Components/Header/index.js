@@ -7,7 +7,7 @@ import { clearToken } from '../../Redux/auth'
 function Header() {
 
     const authToken = useSelector((state) => state.auth.token)
-    const firstNameValue = useSelector((state) => state.firstName.firstName)
+    const userNameValue = useSelector((state) => state.userName.userName)
     const dispatch = useDispatch()
 
     function handleSignout() {
@@ -28,7 +28,7 @@ function Header() {
                     <div>
                         <Link className="main-nav-item" to="/user">
                             <i className="fa fa-user-circle"></i>
-                            {firstNameValue}
+                            {userNameValue}
                         </Link>
                         <Link class="main-nav-item" to="/" onClick={() => handleSignout()}>
                             <i class="fa fa-sign-out"></i>

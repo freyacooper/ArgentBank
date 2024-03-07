@@ -1,6 +1,6 @@
 import './index.scss';
 import Button from '../../Components/Button';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
@@ -11,6 +11,14 @@ function SignIn() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
+    const [remember, setRemember] = useState(false)
+
+    useEffect(() => {
+        const lsToken = window.localStorage.getItem('token')
+        if(lsToken) {
+            navigate('/user')
+        }
+    })
 
     function handleClick(event) {
         event.preventDefault();
@@ -37,6 +45,9 @@ function SignIn() {
                 type: "auth/setToken",
                 payload: data.body.token
             })
+            if(remember) {
+                window.localStorage.setItem('token', data.body.token)
+            }
             navigate('/user')
         })
         .catch(error => {
@@ -51,11 +62,11 @@ function SignIn() {
                 <h1>Sign In</h1>
                 <form onSubmit={(event) => handleClick(event)}> 
                     <div className="input-wrapper">
-                        <label for="username">Username</label>
+                        <label htmlFor="username">Username</label>
                         <input type="text" id="username" onChange={(event) => setEmail(event.target.value)} onClick={() => setErrorMessage('')}/>
                     </div>
                     <div className="input-wrapper">
-                        <label for="password">Password</label>
+                        <label htmlFor="password">Password</label>
                         <input type="password" id="password" onChange={(event) => setPassword(event.target.value)} onClick={() => setErrorMessage('')}/>
                     </div>
                     { errorMessage ? (
@@ -65,8 +76,8 @@ function SignIn() {
                     ) : (null)
                     }
                     <div className="input-remember">
-                        <input type="checkbox" id="remember-me" />
-                        <label for="remember-me">Remember me</label>
+                        <input type="checkbox" id="remember-me" onChange={() => setRemember(!remember)}/>
+                        <label htmlFor="remember-me">Remember me</label>
                     </div>
                     <Button buttonText="Sign In" classProp="button"  />
                 </form>

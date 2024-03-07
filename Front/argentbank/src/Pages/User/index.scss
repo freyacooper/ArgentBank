@@ -2,3 +2,27 @@
     color: #fff;
     margin-bottom: 2rem;
   }
+
+.edit-wrapper {
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: end;
+  .button-wrapper{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    justify-content: center;
+    width: 280px;
+    margin: auto;
+  }
+  label {
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+  input {
+      padding: 5px;
+      font-size: 1rem;
+  }
+}  
