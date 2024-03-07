@@ -17,16 +17,15 @@ function User() {
     const [lastName, setLastName] = useState("")
     const [newUsername, setNewUsername] = useState("")
     console.log(userNameValue)
+    const lsToken = window.localStorage.getItem('token')
 
     useEffect(() => {
-        const lsToken = window.localStorage.getItem('token')
             if(lsToken) {
                 dispatch({
                 type: "auth/setToken",
                 payload: lsToken
                 })
             }
-        const lsUsername = window.localStorage.getItem('newUsername')
             
             if(!authToken && !lsToken) {
                 navigate('/')
@@ -41,8 +40,7 @@ function User() {
                 .then(res => {
                     if(res.status === 200) {
                         return res.json()
-                    }
-                    else {
+                    } else {
                         throw new Error("Erreur lors de la récupération des données.")
                     }
                 })
@@ -53,12 +51,6 @@ function User() {
                         type: "userName/setUserName",
                         payload: data.body.userName,
                     })
-                    if(lsUsername) {
-                        dispatch({
-                        type: "userName/setUserName",
-                        payload: lsUsername
-                        })
-                    }
                 })
                 .catch(error => {
                     console.log(error.message)
@@ -67,12 +59,32 @@ function User() {
         }
     ) 
     function saveUsername() {
-        console.log(newUsername)
-        dispatch({
-            type: "userName/setUserName",
-            payload: newUsername,
-        })
-        window.localStorage.setItem('newUsername', newUsername)
+        const usernameObjet = {
+            "userName" : newUsername
+        }
+        const bodyValue = JSON.stringify(usernameObjet)
+        fetch("http://localhost:3001/api/v1/user/profile", {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${authToken || lsToken}`,
+                     },
+                     body: bodyValue
+                })
+                .then(res => {
+                    if(res.status === 200) {
+                        dispatch({
+                            type: "userName/setUserName",
+                            payload: newUsername,
+                        })
+                        return res.json()
+                    } else {
+                        throw new Error("Erreur lors de la modification des données.")
+                    }
+                })
+                .catch(error => {
+                    console.log(error.message)
+                })
         setEditUsername(false)
     }
 
